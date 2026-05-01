@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('partials/head_includes')%>
+    <style>
+        p {
+            padding: 0px;
+            margin: 0px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .comparison-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+<%-include('partials/header')%>
+
+<section class="product-comparison">
+    <div class="container">
+        <h2 class="text-center" style="color: rgb(255, 192, 0);">Compare Cars</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <select id="car1" onchange="fetchCarDetails(1)">
+                    <option value="">Select Car 1</option>
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <select id="car2" onchange="fetchCarDetails(2)">
+                    <option value="">Select Car 2</option>
+                </select>
+            </div>
+        </div>
+        <table class="comparison-table">
+            <thead>
+            <tr>
+                <th>Feature</th>
+                <th id="heading1">Car 1</th>
+                <th id="heading2">Car 2</th>
+            </tr>
+            </thead>
+            <tbody id="comparison-body">
+            <tr><td>Price (Rs.)</td><td id="price1"></td><td id="price2"></td></tr>
+            <tr><td>Model</td><td id="chasis1"></td><td id="chasis2"></td></tr>
+            <tr><td>Fuel Type</td><td id="fuelType1"></td><td id="fuelType2"></td></tr>
+            <tr><td>Transmission</td><td id="transmissionType1"></td><td id="transmissionType2"></td></tr>
+            <tr><td>Engine Capacity</td><td id="engineCapacity1"></td><td id="engineCapacity2"></td></tr>
+            <tr><td>KM Driven</td><td id="kmDriven1"></td><td id="kmDriven2"></td></tr>
+            <tr><td>Mileage</td><td id="mileage1"></td><td id="mileage2"></td></tr>
+            <tr><td>Owner Type</td><td id="owner_type1"></td><td id="owner_type2"></td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<%-include('partials/footer')%>
+<%-include('partials/body_includes')%>
+<script src="/checkuser.js"></script>
+<script src="/checkdealer.js"></script>
+<script>
+    window.onload = function () {
+        loadCarOptions();
+        checkuser();
+        checkdealer();
+    };
+
+    async function loadCarOptions() {
+        var res = await fetch('/fetchcars/all');
+        res = await res.json();
+        var records=res.records;
+        var html1=`<option value="">Select Car 1 </option>`;
+        var html2=`<option value="">Select Car 2 </option>`;
+        for(var x of records)
+        {
+            html1+=`<option value='${x.id}'>${x.brand} ${x.name}</option>`
+            html2+=`<option value='${x.id}'>${x.brand} ${x.name}</option>`
+        }
+        document.getElementById('car1').innerHTML=html1;
+        document.getElementById('car2').innerHTML=html2;
+    }
+
+    async function fetchCarDetails(carNumber)
+    {
+
+        var carId = document.getElementById(`car${carNumber}`).value;
+        if (!carId) return;
+        var res = await fetch(`/fetchSingleCar/` + carId);
+        res = await res.json();
+        var record = res.records[0];
+        document.getElementById(`heading${carNumber}`).innerHTML=record.brand+" "+record.name;
+        document.getElementById(`price${carNumber}`).innerText = "Rs."+record.price;
+        document.getElementById(`chasis${carNumber}`).innerText = record.chassisNumber;
+        document.getElementById(`fuelType${carNumber}`).innerText = record.fuelType;
+        document.getElementById(`transmissionType${carNumber}`).innerText = record.transmissionType;
+        document.getElementById(`engineCapacity${carNumber}`).innerText = record.engineCapacity+" cc";
+        document.getElementById(`kmDriven${carNumber}`).innerText = record.kmDriven+" km";
+        document.getElementById(`mileage${carNumber}`).innerText = record.mileage;
+        document.getElementById(`owner_type${carNumber}`).innerText = record.ownerType;
+    }
+</script>
+</body>
+
+</html>

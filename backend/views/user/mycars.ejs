@@ -1,0 +1,361 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('../partials/head_includes')%>
+
+    <style>
+        .error{
+            color:red;
+        }
+
+
+        h2 {
+            color: #222; /* Darker for contrast */
+        }
+
+        p {
+            color: #444;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            resize: none;
+            background: #f9f9f9;
+            color: #222;
+            font-size: 14px;
+        }
+
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 30px;
+            color: #bbb;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .star-rating input:checked ~ label {
+            color: goldenrod;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: goldenrod;
+        }
+        .modal{
+            border-radius: 100px;
+        }
+        .modal-body
+        {
+            font-family: Arial, sans-serif;
+            /*background: linear-gradient(to bottom, #222, #555); !* Black to Grey gradient *!*/
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body onload="fetchMycars()">
+<%-include('../partials/user_header')%>
+
+<!-- modal-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title fs-5" id="exampleModalLabel">Vehicle Review</h4>
+                <button type="button" class="btn-danger " data-bs-dismiss="modal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body ">
+                <input type="hidden" id="carId">
+                <div class="review-container">
+                    <h4 class="text-dark">Rate Us</h4>
+                    <select id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+
+                    <h4 class="text-dark mt-3">Your Feedback</h4>
+                    <textarea placeholder="Write your review here..." id="feedback"></textarea>
+                    <button onclick='addReview()' class="btn btn-primary text-uppercase w-100" >Submit</button>
+                    <button onclick="goback()" class="btn mt-3 btn-danger text-uppercase w-100">GO-BACK</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="product-area2 text-center" data-bg-src="/assets/img/bg/product2-bg.png">
+    <div class="container">
+        <div class="title-area text-center">
+            <h2 class="sec-title" style="color: rgb(255, 192, 0);">MY CARS</h2>
+        </div>
+        <div class="row gy-25" id="cars">
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="as-product style2">
+                    <div class="product-thumb-wrap">
+                        <h4 class="product-title h5"><a href="shop-details.html">Ford Explorer XLT</a></h4>
+                        <div class="product-img">
+                            <img src="assets/img/product/product_2_1.png" alt="product image">
+                        </div>
+                        <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                    </div>
+
+                    <div class="product-content">
+                        <h5 class="price h6">$174.000</h5>
+                        <span class="year-tag">2023</span>
+
+                        <div class="product-rating">
+                            <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                            <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                        </div>
+
+                        <ul class="product-feature">
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                New
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                120cc
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                Manual
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                Petrol
+                            </li>
+                        </ul>
+                        <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="as-product style2">
+                    <div class="product-thumb-wrap">
+                        <h4 class="product-title h5"><a href="shop-details.html">Ferrari F12 TRS</a></h4>
+                        <div class="product-img">
+                            <img src="assets/img/product/product_2_2.png" alt="product image">
+                        </div>
+                        <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                    </div>
+
+                    <div class="product-content">
+                        <h5 class="price h6">$274.000</h5>
+                        <span class="year-tag">2023</span>
+
+                        <div class="product-rating">
+                            <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                            <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                        </div>
+
+                        <ul class="product-feature">
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                New
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                120cc
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                Manual
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                Petrol
+                            </li>
+                        </ul>
+                        <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="as-product style2">
+                    <div class="product-thumb-wrap">
+                        <h4 class="product-title h5"><a href="shop-details.html">Maserati Ghibli SQ4</a></h4>
+                        <div class="product-img">
+                            <img src="assets/img/product/product_2_8.png" alt="product image">
+                        </div>
+                        <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                    </div>
+
+                    <div class="product-content">
+                        <h5 class="price h6">$255.000</h5>
+                        <span class="year-tag">2023</span>
+
+                        <div class="product-rating">
+                            <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                            <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                        </div>
+
+                        <ul class="product-feature">
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                New
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                120cc
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                Manual
+                            </li>
+                            <li>
+                                <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                Petrol
+                            </li>
+                        </ul>
+                        <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%-include('../partials/footer')%>
+<%-include('../partials/body_includes')%>
+
+<script>
+    window.onload=function ()
+    {
+        fetchMycars();
+    }
+    async function fetchMycars()
+    {
+        var res=await fetch('/user/fetchMycars');
+        res=await res.json();
+        var records=res.records;
+        console.log(records);
+        var html=``;
+        for(var x of records)
+        {
+            html+=`<div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="as-product style2">
+                    <div class="product-thumb-wrap">
+                        <h4 class="product-title h5">${x.car.brand} ${x.car.name}</h4>
+                        <div class="product-img">
+                            <img src="${x.car.photo}" alt="product image">
+                        </div>
+                     </div>
+
+                    <div class="product-content">
+                        <h5 class="price h6">Rs. ${x.car.price}</h5>
+                        <span class="year-tag">${x.car.model}</span>
+
+                        <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    ${x.car.ownerType}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    ${x.car.engineCapacity}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    ${x.car.transmissionType}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    ${x.car.fuelType}
+                                </li>
+                        </ul>
+                        <div class="mt-2">
+                                <p style="margin:0px; padding: 0px;"> Milaege: ${x.car.mileage} km/l</p>
+                                <p style="margin:0px; padding: 0px;"> Km Driven: ${x.car.kmDriven} kms</p>`
+                               if(x.status=='Pending')
+                               {
+                                   html+=`<p style="margin:0px; padding: 0px;"> Status :<span style='background-color:yellow; color: white;'> ${x.status}</span> </p>`;
+                               }
+                               else if(x.status=='Approved')
+                               {
+                                   html+=`<p style="margin:0px; padding: 0px;"> Status :<span style='background-color:blue; color: white;'> ${x.status}</span> </p>`;
+                               }
+                               else if(x.status=='Cancelled')
+                               {
+                                   html+=`<p style="margin:0px; padding: 0px;"> Status :<span style='background-color:red; color: white;'> ${x.status}</span> </p>`;
+                               }
+                               else
+                               {
+                                   html+=`<p style="margin:0px; padding: 0px;"> Status :<span style='background-color:green; color: white;'> ${x.status}</span> </p>`;
+                               }
+                        html+=`
+                                <p style="margin:0px; padding: 0px; font-weight: bold"> Booked At : ${x.createdAt.split('T')[0]} </p>
+                        </div>`
+                if(x.status=='Completed')
+                {
+                    html+=`<button type='button' data-bs-toggle='modal' data-bs-target='#exampleModal'  class="mt-2 as-btn style4" onclick="openModal(${x.carId})" >Add Review</button>`;
+                }
+                 html+=`</div>
+                </div>
+            </div>`;
+        }
+        document.getElementById("cars").innerHTML=html;
+    }
+    function openModal(carId)
+    {
+        document.getElementById("carId").value=carId;
+    }
+    async function addReview()
+    {
+        var carId=document.getElementById("carId").value;
+        var feedback=document.getElementById('feedback').value;
+        var rating=document.getElementById('rating').value;
+
+        var res=await fetch('/user/addreview',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                carId:carId,
+                feedback:feedback,
+                rating:rating
+            })
+        })
+        res=await res.json();
+        if(res.error)
+        {
+            Qual.errordb("Error",res.message);
+        }
+        else
+        {
+            Qual.successdb("Success", res.message);
+            setTimeout((c)=> {
+                    goback();
+                },2000 //time in milliseconds
+            );
+        }
+    }
+    async function goback()
+    {
+        window.location.href='/user/mycars';
+    }
+
+</script>
+
+</body>
+</html>

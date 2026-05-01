@@ -1,0 +1,578 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('../partials/head_includes')%>
+
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+</head>
+<body onload="fetchcategories()">
+<%-include('../partials/dealer_header')%>
+<div class="bg-light">
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center" style="color: rgb(255, 192, 0);">Add Car</h2>
+        <hr>
+        <form id="addcar">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="categoryId" class="form-label">Choose Car Category:</label>
+                    <select id="categoryId" name="categoryId"  required>
+
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="brand" class="form-label">Brand:</label>
+                    <input type="text" id="brand" name="brand" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="model" class="form-label">Model:</label>
+                    <input type="text" id="model" name="model" class="form-control" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="fuelType" class="form-label">Fuel Type:</label>
+                    <select id="fuelType" name="fuelType"  required>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="CNG">CNG</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="transmissionType" class="form-label">Transmission Type:</label>
+                    <select id="transmissionType" name="transmissionType"  required>
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+                        <option value="CVT">CVT</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="mileage" class="form-label">Mileage (km/l):</label>
+                    <input type="number" id="mileage" name="mileage" class="form-control" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="kmDriven" class="form-label">Kilometers Driven:</label>
+                    <input type="number" id="kmDriven" name="kmDriven" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="engineCapacity" class="form-label">Engine Capacity (cc):</label>
+                    <input type="number" id="engineCapacity" name="engineCapacity" class="form-control" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="chassisNumber" class="form-label">Chassis Number:</label>
+                    <input type="text" id="chassisNumber" name="chassisNumber" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="number" id="price" name="price" class="form-control" required>
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+                    <label for="ownerType" class="form-label">Owner Type:</label>
+                    <select id="ownerType" name="ownerType"  required>
+                        <option value="First Owner">First Owner</option>
+                        <option value="Second Owner">Second Owner</option>
+                        <option value="Third Owner">Third Owner</option>
+                        <option value="Fourth or More">Fourth or More</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="accidentalHistory" class="form-label">Accidental History:</label>
+                    <select id="accidentalHistory" name="accidentalHistory"  required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="contact" class="form-label">Contact:</label>
+                    <input type="text" id="contact" name="contact" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <input type="text" id="address" name="address" class="form-control" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="photos" class="form-label">Photo:</label>
+                    <input type="file" id="photo" name="photo" class="form-control" required>
+                </div>
+            </div>
+            <div class="text-center">
+            <button type="button" class="as-btn style4 w-50 mt-3" onclick="addCar()">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <div class="product-area2 space text-center">
+        <div class="container">
+            <div class="title-area text-center">
+<!--                <h3 class="sub-title"><span class="double-line"></span> TOP CAR INVENTORY</h3>-->
+                <h2 class="sec-title" style="color: rgb(255, 192, 0);">View Cars</h2>
+            </div>
+            <div class="row gy-25" id="cards">
+
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Ferrari F12 TRS</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_2.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$274.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Mercedes-Benz</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_3.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$250.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Mazda MX Miata</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_4.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$300.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Audi A4 1.8 TFSI</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_5.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$350.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Tesla S-Line Upon</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_6.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$355.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">BMW 640 XI Gran</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_7.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$360.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h4 class="product-title h5"><a href="shop-details.html">Maserati Ghibli SQ4</a></h4>
+                            <div class="product-img">
+                                <img src="assets/img/product/product_2_8.png" alt="product image">
+                            </div>
+                            <a class="bookmark-tag" href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                        </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">$255.000</h5>
+                            <span class="year-tag">2023</span>
+
+                            <div class="product-rating">
+                                <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5 based on <span class="rating">1</span> customer rating</span></div>
+                                <a href="shop-details.html" class="review-counter woocommerce-review-link">(<span class="count">26</span> Review)</a>
+                            </div>
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    New
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    120cc
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    Manual
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    Petrol
+                                </li>
+                            </ul>
+                            <a class="as-btn style-border btn-fw" href="checkout.html">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-50">
+                    <a class="as-btn style4" href="shop.html">VIEW MORE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%-include('../partials/footer')%>
+<%-include('../partials/body_includes')%>
+<script>
+        async function addCar()
+        {
+            if($("#addcar").valid())
+            {
+                var categoryId=document.getElementById("categoryId").value;
+                var brand = document.getElementById("brand").value;
+                var model = document.getElementById("model").value;
+                var name = document.getElementById("name").value;
+                var fuelType = document.getElementById("fuelType").value;
+                var transmissionType = document.getElementById("transmissionType").value;
+                var mileage = document.getElementById("mileage").value;
+                var kmDriven = document.getElementById("kmDriven").value;
+                var engineCapacity = document.getElementById("engineCapacity").value;
+                var chassisNumber = document.getElementById("chassisNumber").value;
+                var price = document.getElementById("price").value;
+                var ownerType = document.getElementById("ownerType").value;
+                var accidentalHistory = document.getElementById("accidentalHistory").value;
+                var address = document.getElementById("address").value;
+                var contact = document.getElementById("contact").value;
+                var email = document.getElementById("email").value;
+                var photo=document.getElementById("photo").files[0];
+                // console.log(categoryId);
+                var formData = new FormData();
+                formData.append('categoryId', categoryId);
+                formData.append('brand', brand);
+                formData.append('model', model);
+                formData.append('name', name);
+                formData.append('fuelType', fuelType);
+                formData.append('transmissionType', transmissionType);
+                formData.append('mileage', mileage);
+                formData.append('kmDriven', kmDriven);
+                formData.append('engineCapacity', engineCapacity);
+                formData.append('chassisNumber', chassisNumber);
+                formData.append('price', price);
+                formData.append('ownerType', ownerType);
+                formData.append('accidentalHistory', accidentalHistory);
+                formData.append('address', address);
+                formData.append('contact', contact);
+                formData.append('email', email);
+                formData.append('photo',photo);
+
+                var res=await fetch('/dealer/addcar',
+                    {
+                        method:'POST',
+                        body:formData
+                    });
+                res=await res.json();
+                if(res.error)
+                {
+                    Qual.errordb("Error",res.message);
+                }
+                else
+                {
+                    Qual.successdb("Success",res.message);
+                    document.getElementById("addcar").reset();
+                    fetchcars();
+                }
+            }
+        }
+        async function fetchcategories()
+        {
+            fetchcars();
+            var res=await fetch('/dealer/fetchcategories');
+            res=await res.json();
+            var records=res.records;
+            var html=`<option value=''>Choose Category</option>`;
+            for(var x of records)
+            {
+                html+=`<option value='${x.id}'>${x.name}</option>`;
+            }
+            document.getElementById("categoryId").innerHTML=html;
+        }
+        async function fetchcars()
+        {
+            var res=await fetch('/dealer/fetchcars');
+            res=await res.json();
+            var records=res.records;
+            var html=``;
+            for(var x of records)
+            {
+                html+=` <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h6 class="product-title"><a href="">${x.brand} ${x.name}</a></h6>
+                            <div class="product-img">
+                                <img src="${x.photo}" alt="product image">
+                            </div>
+                           </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">Rs.${x.price}</h5>
+                            <span class="year-tag">${x.model}</span>
+
+
+
+                            <ul class="product-feature">
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-1.svg" alt="icon"></div>
+                                    ${x.ownerType}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-2.svg" alt="icon"></div>
+                                    ${x.engineCapacity}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-3.svg" alt="icon"></div>
+                                    ${x.transmissionType}
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="/assets/img/icon/product-feature-icon-4.svg" alt="icon"></div>
+                                    ${x.fuelType}
+                                </li>
+                            </ul>
+                            <div class="mt-2">
+                                <p style="margin:0px; padding: 0px;"> Milaege: ${x.mileage} km/l</p>
+                                <p style="margin:0px; padding: 0px;"> Km Driven: ${x.kmDriven} kms</p>`
+                        if(x.status=='Available')
+                        {
+                           html+=` <p style="margin:0px; padding: 0px;"> Status: <span class='btn btn-success'>${x.status}</span> </p>`;
+                        }
+                        else
+                        {
+                            html+=` <p style="margin:0px; padding: 0px;"> Status: <span class='btn btn-danger'>${x.status}</span> </p>`;
+                        }
+                            html+=`</div>
+                            <button class="as-btn style-border btn-fw" onclick="deletecar(${x.id})">DELETE</button>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            document.getElementById("cards").innerHTML=html;
+        }
+        async function deletecar(id)
+        {
+            var res=await fetch('/dealer/deletecar/'+id,{method:'DELETE'});
+            res=await res.json();
+            fetchcars();
+        }
+</script>
+</body>
+</html>

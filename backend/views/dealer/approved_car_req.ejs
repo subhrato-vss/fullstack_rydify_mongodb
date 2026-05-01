@@ -1,0 +1,103 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('../partials/head_includes')%>
+
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+</head>
+<body onload="fetchCarReq()">
+<%-include('../partials/dealer_header')%>
+<div class="product-area2  text-center">
+    <div class="container">
+        <div class="title-area text-center">
+            <!--                <h3 class="sub-title"><span class="double-line"></span> TOP CAR INVENTORY</h3>-->
+            <h2 class="sec-title" style="color: rgb(255, 192, 0);" id="nocar">View Approved Car Request</h2>
+        </div>
+        <div class="row gy-25" id="cards">
+
+
+        </div>
+    </div>
+</div>
+<%-include('../partials/footer')%>
+<%-include('../partials/body_includes')%>
+<script src="/js/email2.js"></script>
+<script>
+    async function fetchCarReq()
+    {
+        var res=await fetch('/dealer/fetchapprovedbooking');
+        res=await res.json();
+        var records=res.records;
+        if(records.length==0)
+        {
+            document.getElementById("nocar").innerHTML=`<h1 class='text-center text-danger'>No Approved Request</h1>`;
+            // document.getElementById("cards").setAttribute('style','color:red;');
+        }
+        else {
+            var html = ``;
+            for (var x of records) {
+                html += ` <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="as-product style2">
+                        <div class="product-thumb-wrap">
+                            <h6 class="product-title">${x.car.brand} ${x.car.name}</h6>
+                            <div class="product-img">
+                                <img src="${x.car.photo}" alt="product image">
+                            </div>
+                           </div>
+
+                        <div class="product-content">
+                            <h5 class="price h6">Rs.${x.car.price}</h5>
+                            <span class="year-tag">${x.car.model}</span>
+                            <h6 class="price h6">Status:- ${x.status}</h6>
+                            <h6 class="price h6">Booked At:- ${x.createdAt.split('T')[0]}</h6>
+                            <div class="mt-2">
+                                <h5 class="price h6">User Details :-</h5>
+                                <p style="margin:0px; padding: 0px; padding-left: 10px; font-size: 13px;">Name:- ${x.user.first_name} ${x.user.last_name}</p>
+                                <p style="margin:0px; padding: 0px; padding-left: 10px; font-size: 13px;">Email:- ${x.user.email} </p>
+                                <p style="margin:0px; padding: 0px; padding-left: 10px; font-size: 13px;">Mobile:- ${x.user.mobile} </p>
+                            </div>
+
+                          <div class='row'>`
+
+                html += ` <div class='col col-md-6'>
+                            <button class="btn btn-success " onclick='updateReqStatus(${JSON.stringify(x)},"Completed")'>Complete</button>
+                            </div>`
+
+                html += `
+
+                          </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            document.getElementById("cards").innerHTML = html;
+        }
+
+    }
+    async function updateReqStatus(x,status)
+    {
+        var res = await fetch('/dealer/updatereq/' + x.id, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({status:status})
+        });
+        res = await res.json();
+        if (res.error)
+        {
+            Qual.errordb("Error", res.message);
+        }
+        else
+        {
+            sendMail(x.user.email,x.user.first_name,status,x.car.brand+' '+x.car.name);
+            fetchCarReq();
+        }
+    }
+
+</script>
+</body>
+</html>

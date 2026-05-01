@@ -1,0 +1,131 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('../partials/head_includes')%>
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+</head>
+
+<body>
+<%-include('../partials/header')%>
+<div class="row  justify-content-center">
+    <div class="col-md-6">
+        <form id="adddealer" class="woocommerce-form-login">
+            <div class="mb-3">
+                <label for="name">Full Name</label>
+                <input type="text" name="name" id="name" required data-msg-required="Please Enter Your Full Name" class="form-control" placeholder="Enter Full Name">
+            </div>
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" class="form-control" required data-msg-required="Enter Your Email" placeholder="Enter Email">
+            </div>
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required data-msg-required="Enter Your Password" placeholder="Enter Password">
+            </div>
+            <div class="mb-3">
+                <label for="aadhaar_card">Aadhaar Card</label>
+                <input type="text" name="aadhaar_card" id="aadhaar_card" required data-msg-required="Enter Your Aadhaar Card Number" class="form-control" placeholder="Enter Aadhaar Card Number">
+            </div>
+            <div class="mb-3">
+                <label for="pan_card">PAN Card</label>
+                <input type="text" name="pan_card" id="pan_card" required data-msg-required="Enter Your PAN Card Number" class="form-control" placeholder="Enter PAN Card Number">
+            </div>
+            <div class="mb-3">
+                <label for="mobile">Mobile No.</label>
+                <input type="text" name="mobile" id="mobile" required data-msg-required="Please Enter Your Mobile Number" class="form-control" placeholder="Enter Mobile Number">
+            </div>
+            <div class="mb-3">
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender" class="form-select w-100" required data-msg-required="Select Your Gender">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="photo">Profile Photo</label>
+                <input type="file" name="photo" id="photo" required class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="address">Address</label>
+                <input type="text" name="address" id="address" required data-msg-required="Please Enter Your Address" class="form-control" placeholder="Enter Your Address">
+            </div>
+            <div class="mb-3">
+                <label for="city">City</label>
+                <input type="text" name="city" id="city" required data-msg-required="Please Enter Your City" class="form-control" placeholder="Enter Your City">
+            </div>
+            <button type="button" onclick="addDealer()" class="as-btn style4">
+                <i class="fa fa-lock" aria-hidden="true"></i> Sign Up
+            </button>
+            <div class="mb-3 ml-3">
+                <a href="/dealer/login">Already Registered? Go To Login Page</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%-include('../partials/footer')%>
+<%-include('../partials/body_includes')%>
+<script>
+    async function addDealer()
+    {
+        if($("#adddealer").valid()) // t/f
+        {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var aadhaar_card = document.getElementById("aadhaar_card").value;
+            var pan_card = document.getElementById("pan_card").value;
+            var mobile = document.getElementById("mobile").value;
+            var gender = document.getElementById("gender").value;
+            var photo = document.getElementById("photo").files[0];
+            var address = document.getElementById("address").value;
+            var city = document.getElementById("city").value;
+
+            var formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('adhar_card', aadhaar_card);
+            formData.append('pan_card', pan_card);
+            formData.append('mobile', mobile);
+            formData.append('gender', gender);
+            formData.append('photo', photo);
+            formData.append('address', address);
+            formData.append('city', city);
+
+            var res=await fetch("/dealer/register",
+                {
+                    method:"POST",
+                    body:formData
+                });
+
+            res=await res.json();
+            console.log(res); // object {error:t/f ,message:" "}
+            if(res.error)
+            {
+                Qual.errordb("Error",res.message);
+            }
+            else
+            {
+
+                Qual.successdb("Success",res.message);
+                document.getElementById("adddealer").reset();
+                setTimeout((c)=>
+                {
+                    window.location.href='/dealer/login';
+                },1000);
+            }
+
+        }
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('../partials/head_includes')%>
+
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+</head>
+
+<body>
+<%-include('../partials/header')%>
+<div class="row  justify-content-center">
+    <div class="col-md-6">
+        <form action="" class="woocommerce-form-login" id="loginform">
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" name="email" id="email" class="form-control" required data-msg-required="Enter Your Email" placeholder="Enter Email" >
+            </div>
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" name="password" id="password" class="form-control" required data-msg-required="Enter Your Password" placeholder="Enter Password" >
+            </div>
+            <div class="form-group">
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="remembermylogin">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="as-btn style4" onclick="LoginAdmin()">Login</button>
+<!--                <p class="fs-xs mt-2 mb-0"><a class="text-reset" href="">Not Registered Yet? Go To Login Page</a></p>-->
+            </div>
+        </form>
+    </div>
+</div>
+
+<%-include('../partials/footer')%>
+<%-include('../partials/body_includes')%>
+<script>
+    async function LoginAdmin()
+    {
+        if($("#loginform").valid())
+        {
+            var email=document.getElementById("email").value;
+            var password=document.getElementById("password").value;
+            var res=await fetch('/admin/login',
+                {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':"application/json"
+                    },
+                    body:JSON.stringify({
+                        email:email,
+                        password:password
+                    })
+                });
+            res=await res.json();
+            if(res.error)
+            {
+                Qual.errordb("Error",res.message);
+            }
+            else
+            {
+
+                Qual.successdb("Success",res.message);
+                setTimeout((c)=> {
+                        window.location.href = '/admin/dashboard';
+                    },2000
+                );
+            }
+
+        }
+    }
+
+</script>
+</body>
+</html>

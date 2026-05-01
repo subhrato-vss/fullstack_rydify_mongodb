@@ -1,0 +1,274 @@
+.comparePage {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero Section (Shared Style) */
+.heroSection {
+  padding: 160px 0 100px;
+  position: relative;
+  text-align: center;
+}
+
+.heroGlow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.badge {
+  color: #38bdf8;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.heroTitle {
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  letter-spacing: -2px;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroDesc {
+  color: #94a3b8;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.breadcrumb a {
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+/* Comparison UI */
+.comparisonWrapper {
+  margin-top: 40px;
+}
+
+.selectionHeader {
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.carColumn {
+  width: 100%;
+}
+
+.carCard, .emptyCard {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(16px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.4s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carCard:hover, .emptyCard:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(30, 41, 59, 0.7);
+}
+
+.imageBox {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageBox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+}
+
+.carName {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 0.5rem;
+}
+
+.carPrice {
+  color: #38bdf8;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.emptyCard .plusIcon {
+  width: 60px;
+  height: 60px;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.emptyCard p {
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.selectBtn {
+  width: 100%;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 1.25rem;
+  border-radius: 14px;
+  color: #f8fafc;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.selectBtn option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.selectBtn:focus {
+  border-color: #38bdf8;
+}
+
+/* Specs Table */
+.specsTable {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.tableTitle {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem 2.5rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr;
+  gap: 2rem;
+  padding: 1.25rem 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  align-items: center;
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specRow:nth-child(even) {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.specLabel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.specIcon {
+  width: 32px;
+  height: 32px;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  font-size: 0.85rem;
+}
+
+.specValue {
+  text-align: center;
+  font-weight: 800;
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.emptyDash {
+  color: #334155;
+}
+
+@media (max-width: 1024px) {
+  .heroTitle { font-size: 3.5rem; }
+  .selectionHeader, .specRow {
+    grid-template-columns: 1fr 1fr;
+  }
+  .headerLabel, .specLabel {
+    grid-column: span 2;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle { font-size: 2.75rem; }
+  .selectionHeader, .specRow {
+    grid-template-columns: 1fr;
+  }
+  .headerLabel, .specLabel {
+    grid-column: span 1;
+  }
+}

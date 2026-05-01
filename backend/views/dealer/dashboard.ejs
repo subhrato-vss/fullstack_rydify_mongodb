@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head_includes') %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffcc66, #ff9900);
+            color: #333;
+        }
+
+        .dashboard {
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px 0;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            width: 230px;
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff9900;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body onload="fetchdata()">
+<%- include('../partials/dealer_header') %>
+<div class="page-inner">
+    <div class="dashboard">
+        <h1>Dealer Dashboard</h1>
+
+        <div class="cards">
+            <div class="card">
+                <h2>My Vehicles</h2>
+                <p class="stat" id="vehicleCount">15</p>
+            </div>
+            <div class="card">
+                <h2>Pending Requests</h2>
+                <p class="stat" id="pendingCount">5</p>
+            </div>
+            <div class="card">
+                <h2>Approved Requests</h2>
+                <p class="stat" id="approvedCount">8</p>
+            </div>
+            <div class="card">
+                <h2>Completed Requests</h2>
+                <p class="stat" id="completedCount">12</p>
+            </div>
+            <div class="card">
+                <h2>Cancelled Requests</h2>
+                <p class="stat" id="cancelledCount">2</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="dealerChart"></canvas>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer') %>
+<%- include('../partials/body_includes') %>
+<script>
+    async function fetchdata() {
+        const updateStat = async (url, id) => {
+            let res = await fetch(url);
+            res = await res.json();
+            document.getElementById(id).innerText = res.records.length;
+        };
+
+        await updateStat('/dealer/fetchcars', 'vehicleCount');
+        await updateStat('/dealer/fetchcarreq', 'pendingCount');
+        await updateStat('/dealer/fetchapprovedbooking', 'approvedCount');
+        await updateStat('/dealer/fetchcompletedbooking', 'completedCount');
+        await updateStat('/dealer/fetchcancelledbooking', 'cancelledCount');
+    }
+
+    const ctxDealer = document.getElementById('dealerChart').getContext('2d');
+    new Chart(ctxDealer, {
+        type: 'bar',
+        data: {
+            labels: ['My Vehicles', 'Pending', 'Approved', 'Completed', 'Cancelled'],
+            datasets: [{
+                label: 'Dealer Stats',
+                data: [10, 4, 6, 9, 13],
+                backgroundColor: ['#ffcc66', '#ff9933', '#ff6600', '#ff3300', '#cc0000'],
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+</body>
+</html>

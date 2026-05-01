@@ -1,0 +1,181 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <%-include('partials/head_includes')%>
+    <style>
+        p
+        {
+            padding:0px;
+            margin:0px;
+        }
+    </style>
+</head>
+<body>
+<%-include('partials/header')%>
+<!--==============================
+    Product Details
+==============================-->
+<section class="product-details space">
+    <div class="container">
+        <div class="row gx-60">
+            <div class="col-lg-6">
+                <div class="product-big-img">
+                    <div class="img"><img src="" id="image" alt="Product Image" width="600px" style="height:300px;"></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="product-about">
+                     <p class="price" >Rs. <span id="price"></span></p>
+                    <h2 class="product-title" id="name"></h2>
+                    <input type="hidden" id="dealerId">
+                    <input type="hidden" id="carId">
+                    <div class="checklist">
+                        <ul>
+                            <li><i class="far fa-circle-check"></i> Model:- <p id="chasis" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> Fuel Type:- <p id="fuelType" class="text-uppercase"> </p></li>
+<!--                            <li><i class="far fa-circle-check"></i> Engine Type:- <p id="engineType" class="text-uppercase"> </p></li>-->
+                            <li><i class="far fa-circle-check"></i> Transmission Type:- <p id="transmissionType" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> Engine Capacity:- <p id="engineCapacity" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> KM Driven:- <p id="kmDriven" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> Mileage :- <p id="mileage" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> Owner Type :- <p id="owner_type" class="text-uppercase"> </p></li>
+                            <li><i class="far fa-circle-check"></i> Accidental History :- <p id="accidental_history" class="text-uppercase"> </p></li>
+
+                        </ul>
+                    </div>
+                    <div class="actions">
+
+                        <button type='button' class="as-btn style4" onclick="addCarRequest()">Contact Dealer
+                        </button>
+                    </div>
+                    <div class="product_meta">
+<!--                        <span class="sku_wrapper">SKU: <span class="sku">wheel-fits-chevy-camaro</span></span>-->
+                        <span class="posted_in">Category: <span id="category">Tires & Wheels</span></span>
+<!--                        <span>Tags: <a href="shop.html">automotive parts</a><a href="shop.html">wheels</a></span>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<h3 class="text-center" style="color:rgb(255, 192, 0);">Dealer Information</h3>
+<table class="woocommerce-table container">
+    <tbody>
+    <tr>
+        <th>Name</th>
+        <td id="dealer_name"></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td id="dealer_email"></td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td id="address"></td>
+    </tr>
+    <tr>
+        <th >Gender</th>
+        <td id="gender"></td>
+    </tr>
+    <tr>
+        <th>Mobile</th>
+        <td id="mobile"></td>
+    </tr>
+    </tbody>
+</table>
+<%-include('partials/footer')%>
+<%-include('partials/body_includes')%>
+<script src="/checkuser.js"></script>
+<script src="/checkdealer.js"></script>
+<script>
+    window.onload=function ()
+    {
+        checkuser();
+        checkdealer();
+        fetchSingleCar(<%=id%>)
+    }
+    async function fetchSingleCar(id)
+    {
+        var res=await fetch('/fetchSingleCar/'+id);
+        res=await res.json();
+        var record=res.records[0];
+         // console.log(record);
+        document.getElementById("image").src=record.photo;
+        document.getElementById("price").innerHTML=record.price;
+        document.getElementById("name").innerText= record.brand+" "+record.name;
+        document.getElementById("chasis").innerText=record.chassisNumber;
+        document.getElementById('fuelType').innerText=record.fuelType;
+        document.getElementById('transmissionType').innerHTML=record.transmissionType;
+        document.getElementById('engineCapacity').innerHTML=record.engineCapacity;
+        document.getElementById('kmDriven').innerHTML=record.kmDriven;
+        document.getElementById('mileage').innerHTML=record.mileage;
+        document.getElementById('accidental_history').innerHTML=record.accidentalHistory;
+        document.getElementById('owner_type').innerHTML=record.ownerType;
+        document.getElementById("category").innerHTML=record.category.name;
+
+        document.getElementById('dealer_name').innerHTML=record.dealer.name;
+        document.getElementById('dealer_email').innerHTML=record.dealer.email;
+        document.getElementById('address').innerHTML=record.dealer.address;
+        document.getElementById('gender').innerHTML=record.dealer.gender;
+        document.getElementById('mobile').innerHTML=record.dealer.mobile;
+        document.getElementById('carId').value=record.id;
+        document.getElementById('dealerId').value=record.dealerId;
+    }
+    async function addCarRequest()
+    {
+        var carId=document.getElementById('carId').value;
+        var dealerId=document.getElementById('dealerId').value;
+        var res=await fetch('/user/addCarRequest',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({carId:carId,dealerId:dealerId})
+        });
+        res=await res.json();
+        if(res.isLogin==false)
+        {
+            window.location.href='/user/login';
+        }
+        else if(res.error)
+        {
+            Qual.errordb('Error',res.message);
+        }
+        else
+        {
+            updateStatus(carId);
+        }
+    }
+    async function updateStatus(carId)
+    {
+        //update vehicle id
+        var res=await fetch('/user/updateCar/'+carId,{
+            method:'PUT',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(
+                {
+                    status:'sold'
+                }
+            )
+        });
+
+        res=await res.json();
+        if(res.error)
+        {
+            Qual.errordb("Error",res.message);
+        }
+        else
+        {
+            thankyou();
+        }
+
+    }
+
+    function thankyou()
+    {
+        window.location.href='/user/thankyou';
+    }
+</script>
+</body>
+
+</html>
