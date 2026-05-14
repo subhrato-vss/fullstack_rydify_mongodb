@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());
 app.use(express.static('public'));
 
@@ -37,6 +37,6 @@ app.listen(port, (error) => {
     if (error) {
         console.log(error.message);
     } else {
-        console.log("server is running on port " + port);
+        console.log("Server is running | http://localhost:" + port);
     }
 });

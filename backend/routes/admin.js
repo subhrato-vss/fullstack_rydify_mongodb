@@ -11,7 +11,7 @@ adminRouter.use(express.json());
 var cookieParser=require('cookie-parser');
 adminRouter.use(cookieParser());
 
-var connection=require("../connection");
+
 var adminController = require("../controllers/adminController");
 const { body } = require('express-validator');
 const { validate } = require('../middleware/validationMiddleware');
