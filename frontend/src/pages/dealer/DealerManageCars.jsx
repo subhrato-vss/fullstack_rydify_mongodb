@@ -14,11 +14,23 @@ const DealerManageCars = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [isFormVisible, setIsFormVisible] = useState(false);
 
+    const carBrands = [
+        "Toyota", "Honda", "Ford", "BMW", "Mercedes-Benz", "Audi", "Volkswagen", 
+        "Hyundai", "Kia", "Nissan", "Maruti Suzuki", "Tata", "Mahindra", "Skoda", "Renault"
+    ];
+
+    const bikeBrands = [
+        "Royal Enfield", "Hero", "Honda", "TVS", "Bajaj", "Yamaha", "Suzuki", 
+        "KTM", "Kawasaki", "Jawa", "Harley-Davidson", "Triumph", "Ducati", "BMW"
+    ];
+
+
     const {
         register,
         handleSubmit,
         trigger,
         reset,
+        watch,
         formState: { errors }
     } = useForm({
         mode: 'onChange',
@@ -27,7 +39,8 @@ const DealerManageCars = () => {
             fuelType: 'Petrol',
             transmissionType: 'Manual',
             ownerType: 'First Owner',
-            accidentalHistory: 'No'
+            accidentalHistory: 'No',
+            type: 'car'
         }
     });
 
@@ -41,6 +54,9 @@ const DealerManageCars = () => {
         if (photo.startsWith('/')) return `http://localhost:5000${photo}`;
         return `http://localhost:5000/uploads/${photo}`;
     };
+
+    const vehicleType = watch('type');
+    const filteredCategories = categories.filter(cat => cat.type === vehicleType);
 
     const fetchData = async () => {
         try {
@@ -60,7 +76,7 @@ const DealerManageCars = () => {
 
     const nextStep = async () => {
         let fieldsToValidate = [];
-        if (currentStep === 1) fieldsToValidate = ['category', 'brand', 'name', 'model'];
+        if (currentStep === 1) fieldsToValidate = ['type', 'category', 'brand', 'name', 'model'];
         if (currentStep === 2) fieldsToValidate = ['fuelType', 'transmissionType', 'mileage', 'kmDriven', 'engineCapacity', 'chassisNumber'];
 
         const result = await trigger(fieldsToValidate);
@@ -162,10 +178,17 @@ const DealerManageCars = () => {
                     </button>
                     <div className={styles.statsMini}>
                         <div className={styles.statItem}>
-                            <i className="fas fa-car-side text-warning"></i>
+                            <i className="fas fa-car text-warning"></i>
                             <div>
-                                <span className={styles.statVal}>{cars.length}</span>
-                                <span className={styles.statLbl}> Total Vehicles</span>
+                                <span className={styles.statVal}>{cars.filter(c => c.type === 'car').length}</span>
+                                <span className={styles.statLbl}> Total Cars</span>
+                            </div>
+                        </div>
+                        <div className={styles.statItem}>
+                            <i className="fas fa-motorcycle text-info"></i>
+                            <div>
+                                <span className={styles.statVal}>{cars.filter(c => c.type === 'bike').length}</span>
+                                <span className={styles.statLbl}> Total Bikes</span>
                             </div>
                         </div>
                         <div className={styles.statItem}>
@@ -204,13 +227,24 @@ const DealerManageCars = () => {
                     {currentStep === 1 && (
                         <div className={styles.formGrid}>
                             <div className={styles.inputGroup}>
+                                <label className={styles.label}>Vehicle Type</label>
+                                <select
+                                    className={`${styles.select} ${errors.type ? styles.inputError : ''}`}
+                                    {...register('type', { required: 'Type is required' })}
+                                >
+                                    <option value="car">Car</option>
+                                    <option value="bike">Bike</option>
+                                </select>
+                                {errors.type && <span className={styles.errorText}>{errors.type.message}</span>}
+                            </div>
+                            <div className={styles.inputGroup}>
                                 <label className={styles.label}>Category</label>
                                 <select
                                     className={`${styles.select} ${errors.category ? styles.inputError : ''}`}
                                     {...register('category', { required: 'Category is required' })}
                                 >
                                     <option value="">Choose Category</option>
-                                    {categories.map(cat => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
+                                    {filteredCategories.map(cat => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
                                 </select>
                                 {errors.category && <span className={styles.errorText}>{errors.category.message}</span>}
                             </div>
@@ -221,19 +255,9 @@ const DealerManageCars = () => {
                                     {...register('brand', { required: 'Brand is required' })}
                                 >
                                     <option value="">Choose Brand</option>
-                                    <option value="Toyota">Toyota</option>
-                                    <option value="Honda">Honda</option>
-                                    <option value="Ford">Ford</option>
-                                    <option value="BMW">BMW</option>
-                                    <option value="Mercedes-Benz">Mercedes-Benz</option>
-                                    <option value="Audi">Audi</option>
-                                    <option value="Volkswagen">Volkswagen</option>
-                                    <option value="Hyundai">Hyundai</option>
-                                    <option value="Kia">Kia</option>
-                                    <option value="Nissan">Nissan</option>
-                                    <option value="Maruti Suzuki">Maruti Suzuki</option>
-                                    <option value="Tata">Tata</option>
-                                    <option value="Mahindra">Mahindra</option>
+                                    {(vehicleType === 'bike' ? bikeBrands : carBrands).map(brand => (
+                                        <option key={brand} value={brand}>{brand}</option>
+                                    ))}
                                 </select>
                                 {errors.brand && <span className={styles.errorText}>{errors.brand.message}</span>}
                             </div>

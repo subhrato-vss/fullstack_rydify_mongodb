@@ -14,9 +14,9 @@ const DealerSidebar = () => {
 
     const menuItems = [
         { path: '/dealer/dashboard', label: 'Dashboard', icon: 'fas fa-th-large' },
-        { path: '/dealer/manage_cars', label: 'Manage Cars', icon: 'fas fa-car' },
+        { path: '/dealer/manage_cars', label: 'Manage Vehicle', icon: 'fas fa-car-side' },
         {
-            label: 'Car Requests',
+            label: 'Vehicle Requests',
             icon: 'fas fa-exchange-alt',
             isDropdown: true,
             isOpen: isRequestsOpen,

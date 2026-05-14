@@ -25,7 +25,7 @@ const AboutSection = () => {
                 <i className="fas fa-store-alt"></i>
               </div>
               <div className={styles.headerText}>
-                <h3>For Car Dealers</h3>
+                <h3>For Vehicle Dealers</h3>
                 <p>Empower your dealership</p>
               </div>
             </div>
@@ -77,8 +77,8 @@ const AboutSection = () => {
                 <i className="fas fa-user-tie"></i>
               </div>
               <div className={styles.headerText}>
-                <h3>For Car Renters</h3>
-                <p>Find your perfect drive</p>
+                <h3>For Renters</h3>
+                <p>Find your perfect ride</p>
               </div>
             </div>
             
@@ -87,7 +87,7 @@ const AboutSection = () => {
                 <div className={styles.stepNum}>01</div>
                 <div className={styles.stepContent}>
                   <h4>Seamless Discovery</h4>
-                  <p>Browse a wide variety of verified cars from local trusted dealers.</p>
+                  <p>Browse a wide variety of verified cars and bikes from local trusted dealers.</p>
                 </div>
               </div>
               <div className={styles.stepItem}>

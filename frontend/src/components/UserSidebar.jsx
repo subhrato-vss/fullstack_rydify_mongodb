@@ -12,7 +12,7 @@ const UserSidebar = () => {
 
     const menuItems = [
         { path: '/user/dashboard', label: 'Dashboard', icon: 'fas fa-th-large' },
-        { path: '/cars', label: 'Explore Cars', icon: 'fas fa-search' },
+        { path: '/cars', label: 'Explore Fleet', icon: 'fas fa-search' },
         { path: '/user/mycars', label: 'My Bookings', icon: 'fas fa-car' },
         { path: '/user/profile', label: 'My Profile', icon: 'fas fa-user-circle' },
         // { path: '/user/change_password', label: 'Settings', icon: 'fas fa-cog' },

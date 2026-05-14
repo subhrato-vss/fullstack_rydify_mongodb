@@ -65,6 +65,7 @@ adminRouter.post('/login', [
 ], adminController.loginAdmin);
 adminRouter.get('/token', AuthorizeAdmin_HTTP, adminController.checkToken);
 adminRouter.get('/dashboard',AuthorizeAdmin,adminController.renderDashboard);
+adminRouter.get('/dashboard_stats', AuthorizeAdmin_HTTP, adminController.getDashboardStats);
 
 //manage dealer
 adminRouter.get('/manage_dealer',AuthorizeAdmin,adminController.renderManageDealer);

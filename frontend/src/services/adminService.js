@@ -16,8 +16,11 @@ const adminService = {
   }),
   deleteCategory: (id) => apiClient.delete(`/admin/delete_category/${id}`),
 
+  // Dashboard Stats
+  getDashboardStats: () => apiClient.get('/admin/dashboard_stats'),
+
   // Bookings & Users
-  getBookings: () => apiClient.get('/admin/fetchbooking'),
+  getBookings: (params) => apiClient.get('/admin/fetchbooking', { params }),
   getUsers: () => apiClient.get('/admin/fetchUsers'),
 };
 

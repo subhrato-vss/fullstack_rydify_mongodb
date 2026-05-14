@@ -44,6 +44,7 @@ const ManageCategories = () => {
         try {
             const formData = new FormData();
             formData.append('name', data.name);
+            formData.append('type', data.type);
             if (data.photo && data.photo[0]) {
                 formData.append('photo', data.photo[0]);
             }
@@ -66,6 +67,7 @@ const ManageCategories = () => {
         try {
             const formData = new FormData();
             formData.append('name', data.name);
+            formData.append('type', data.type);
             if (data.photo && data.photo[0]) {
                 formData.append('photo', data.photo[0]);
             }
@@ -87,6 +89,7 @@ const ManageCategories = () => {
     const handleEditClick = (category) => {
         setCurrentCategory(category);
         setValueEdit('name', category.name);
+        setValueEdit('type', category.type || 'car');
         setIsEditModalOpen(true);
     };
 
@@ -133,6 +136,19 @@ const ManageCategories = () => {
                                     disabled={submitting}
                                 />
                                 {errors.name && <div className={styles.errorText}>{errors.name.message}</div>}
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="type" className={styles.label}>Category Type</label>
+                                <select
+                                    id="type"
+                                    className={`${styles.select} ${errors.type ? styles.inputError : ''}`}
+                                    {...register('type', { required: 'Type is required' })}
+                                    disabled={submitting}
+                                >
+                                    <option value="car">Car</option>
+                                    <option value="bike">Bike</option>
+                                </select>
+                                {errors.type && <div className={styles.errorText}>{errors.type.message}</div>}
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Category Photo</label>
@@ -183,7 +199,12 @@ const ManageCategories = () => {
                                 />
                             </div>
                             <div className={styles.gridCardBody}>
-                                <h4 className={styles.gridCardTitle}>{category.name}</h4>
+                                <div className="d-flex justify-content-between align-items-center mb-2">
+                                    <h4 className={styles.gridCardTitle} style={{ margin: 0 }}>{category.name}</h4>
+                                    <span className={`${styles.statusBadge} ${category.type === 'car' ? styles.statusActive : styles.statusPending}`} style={{ fontSize: '0.65rem' }}>
+                                        {category.type || 'car'}
+                                    </span>
+                                </div>
                                 <div className="d-flex gap-2">
                                     <button
                                         className={styles.btnPrimary}
@@ -227,6 +248,19 @@ const ManageCategories = () => {
                             disabled={submitting}
                         />
                         {errorsEdit.name && <div className={styles.errorText}>{errorsEdit.name.message}</div>}
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="edit_type" className={styles.label}>Category Type</label>
+                        <select
+                            id="edit_type"
+                            className={`${styles.select} ${errorsEdit.type ? styles.inputError : ''}`}
+                            {...registerEdit('type', { required: 'Type is required' })}
+                            disabled={submitting}
+                        >
+                            <option value="car">Car</option>
+                            <option value="bike">Bike</option>
+                        </select>
+                        {errorsEdit.type && <div className={styles.errorText}>{errorsEdit.type.message}</div>}
                     </div>
                     <div className={styles.formGroup}>
                         <label className={styles.label}>Category Photo (Optional)</label>

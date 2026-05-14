@@ -243,9 +243,9 @@ const SingleCar = () => {
 
                 {/* Detailed Specifications */}
                 <section className={styles.detailsSection}>
-                    <div className={styles.sectionHeading}>
-                        <i className="fas fa-list-ul"></i>
-                        <h2>Technical Specifications</h2>
+                    <div className={`${styles.sectionHeading} text-white`}>
+                        {/* <i className="fas fa-list-ul"></i> */}
+                        <h2 className='text-white'>Technical Specifications</h2>
                     </div>
                     <div className={styles.specsGrid}>
                         {specs.map((spec, index) => (

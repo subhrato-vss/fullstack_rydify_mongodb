@@ -151,7 +151,7 @@ adminController.renderManageCategory=(req,res)=>
 adminController.addCategory=async (req,res)=>
 {
     try {
-        var {name} = req.body;
+        var {name, type} = req.body;
         var result = await Category.find({name: name});
         if (result.length == 0) {
             var {photo} = req.files;
@@ -199,7 +199,7 @@ adminController.viewCategory=async (req,res)=>
 adminController.updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, type } = req.body;
         
         if (req.files && req.files.photo) {
             const { photo } = req.files;
@@ -215,7 +215,7 @@ adminController.updateCategory = async (req, res) => {
                 res.json({ success: true, message: "Category updated successfully" });
             });
         } else {
-            await Category.findByIdAndUpdate(id, { name });
+            await Category.findByIdAndUpdate(id, { name, type });
             res.json({ success: true, message: "Category updated successfully" });
         }
     } catch (e) {
@@ -279,20 +279,19 @@ adminController.renderBooking=(req,res)=>
     res.json({ success: true, message: "View Bookings endpoint accessed successfully" });
 }
 adminController.fetchBookings = async (req, res) => {
-    try
-    {
+    try {
         let { page = 1, limit = 10, status } = req.query;
         page = parseInt(page);
         limit = parseInt(limit);
         const offset = (page - 1) * limit;
 
-        const whereClause = status ? { status } : {};
+        const whereClause = status && status !== 'all' ? { status } : {};
 
-        const count = await CarRequest.countDocuments(whereClause);
-        const rows = await CarRequest.find(whereClause)
+        const count = await Booking.countDocuments(whereClause);
+        const rows = await Booking.find(whereClause)
             .populate({
                 path: 'car',
-                select: 'brand model name mileage photo price'
+                select: 'brand model name mileage photo price type'
             })
             .populate({
                 path: 'user',
@@ -317,12 +316,43 @@ adminController.fetchBookings = async (req, res) => {
             message: "Bookings fetched successfully" 
         });
     }
-    catch (e)
-    {
+    catch (e) {
         res.status(500).json({ success: false, message: "Failed to fetch bookings", error: e.message });
     }
 }
 
+adminController.getDashboardStats = async (req, res) => {
+    try {
+        const [dealers, users, vehicles, bookings, recentBookings] = await Promise.all([
+            Dealer.countDocuments(),
+            User.countDocuments(),
+            Car.countDocuments(),
+            Booking.countDocuments(),
+            Booking.find()
+                .populate('user', 'name email')
+                .populate('car', 'name brand type price')
+                .populate('dealer', 'name')
+                .sort({ createdAt: -1 })
+                .limit(5)
+        ]);
+
+        res.json({
+            success: true,
+            data: {
+                stats: {
+                    dealers,
+                    users,
+                    vehicles,
+                    bookings
+                },
+                recentBookings
+            },
+            message: "Dashboard stats fetched successfully"
+        });
+    } catch (e) {
+        res.status(500).json({ success: false, message: "Failed to fetch dashboard stats", error: e.message });
+    }
+}
 adminController.fetchUsers = async (req, res) => {
     try {
         let { page = 1, limit = 10 } = req.query;

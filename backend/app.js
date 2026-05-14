@@ -6,8 +6,9 @@ var morgan = require('morgan');
 var connectDB = require('./mongodb.config');
 var app = express();
 
-// Connect MongoDB
-connectDB();
+// Connect MongoDB and Start Server
+connectDB().then(() => {
+
 
 // Middlewares
 app.use(morgan('dev'));
@@ -32,11 +33,15 @@ var dealerRouter = require('./routes/dealer');
 app.use('/api/v1/dealer', dealerRouter);
 
 
-var port = 5000;
-app.listen(port, (error) => {
-    if (error) {
-        console.log(error.message);
-    } else {
-        console.log("Server is running | http://localhost:" + port);
-    }
+    var port = 5000;
+    app.listen(port, (error) => {
+        if (error) {
+            console.log(error.message);
+        } else {
+            console.log("Server is running | http://localhost:" + port);
+        }
+    });
+}).catch((err) => {
+    console.error("Failed to start server due to DB connection error:", err.message);
 });
+

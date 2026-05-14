@@ -101,8 +101,9 @@ dealerController.getStats = async (req, res) => {
     try {
         const dealerId = req.dealer.id;
         
-        const [totalCars, pendingCount, confirmedCount, completedCount, cancelledCount] = await Promise.all([
-            Car.countDocuments({ dealer: dealerId }),
+        const [totalCars, totalBikes, pendingCount, confirmedCount, completedCount, cancelledCount] = await Promise.all([
+            Car.countDocuments({ dealer: dealerId, type: 'car' }),
+            Car.countDocuments({ dealer: dealerId, type: 'bike' }),
             Booking.countDocuments({ dealer: dealerId, status: 'Pending' }),
             Booking.countDocuments({ dealer: dealerId, status: 'Confirmed' }),
             Booking.countDocuments({ dealer: dealerId, status: 'Completed' }),
@@ -112,7 +113,9 @@ dealerController.getStats = async (req, res) => {
         res.json({
             success: true,
             data: {
-                vehicles: totalCars,
+                vehicles: totalCars + totalBikes,
+                cars: totalCars,
+                bikes: totalBikes,
                 pending: pendingCount,
                 confirmed: confirmedCount,
                 completed: completedCount,

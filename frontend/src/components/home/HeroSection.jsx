@@ -27,8 +27,8 @@ const HeroSection = () => {
             </h1>
             
             <p className={styles.subTitle}>
-              Streamline your driving experience with our end-to-end rental ecosystem. 
-              Book premium vehicles from verified dealers with just a few clicks.
+              Streamline your journey with our premium fleet of cars and bikes. 
+              Book high-quality vehicles from verified dealers with just a few clicks.
             </p>
 
             <div className={styles.ctaGroup}>

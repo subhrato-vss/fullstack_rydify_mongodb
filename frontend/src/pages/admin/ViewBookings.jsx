@@ -5,12 +5,13 @@ import styles from './AdminShared.module.css';
 const ViewBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [status, setStatus] = useState('all');
 
     useEffect(() => {
         const fetchBookings = async () => {
             try {
                 setLoading(true);
-                const response = await adminService.getBookings();
+                const response = await adminService.getBookings({ status });
                 if (response.data.success) {
                     setBookings(response.data.data || []);
                 }
@@ -21,87 +22,139 @@ const ViewBookings = () => {
             }
         };
         fetchBookings();
-    }, []);
+    }, [status]);
+
+    const statusTabs = [
+        { id: 'all', label: 'All Bookings', icon: 'fas fa-list-ul' },
+        { id: 'Pending', label: 'Pending', icon: 'fas fa-clock' },
+        { id: 'Confirmed', label: 'Confirmed', icon: 'fas fa-check-circle' },
+        { id: 'Completed', label: 'Completed', icon: 'fas fa-flag-checkered' },
+        { id: 'Cancelled', label: 'Cancelled', icon: 'fas fa-times-circle' },
+    ];
 
     const getStatusStyle = (status) => {
-        switch (status) {
-            case 'Completed': return `${styles.statusBadge} ${styles.statusCompleted}`;
-            case 'Pending': return `${styles.statusBadge} ${styles.statusPending}`;
-            case 'Cancelled': return `${styles.statusBadge} ${styles.statusCancelled}`;
-            case 'Approved': return `${styles.statusBadge} ${styles.statusApproved}`;
-            default: return styles.statusBadge;
-        }
+        const s = status?.toLowerCase();
+        if (s === 'completed' || s === 'approved') return `${styles.statusBadge} ${styles.statusCompleted}`;
+        if (s === 'pending') return `${styles.statusBadge} ${styles.statusPending}`;
+        if (s === 'cancelled' || s === 'rejected') return `${styles.statusBadge} ${styles.statusCancelled}`;
+        return styles.statusBadge;
     };
 
     if (loading) return (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className={styles.loadingContainer}>
             <div className="spinner-border text-warning" role="status">
                 <span className="visually-hidden">Loading...</span>
             </div>
+            <p>Retrieving transaction records...</p>
         </div>
     );
 
     return (
         <div className={styles.container}>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className={styles.title}>Booking Management</h2>
+            <div className={styles.pageHeader}>
+                <div>
+                    <h2 className={styles.title}>Booking Intelligence</h2>
+                    <p className={styles.subtitle}>Monitor and manage all platform transactions</p>
+                </div>
                 <div className={styles.statsBadge}>
                     <i className="fas fa-calendar-check"></i>
-                    <span>Total Bookings: <strong>{bookings.length}</strong></span>
+                    <span>Total Activity: <strong>{bookings.length}</strong></span>
                 </div>
             </div>
 
-            <div className={styles.grid}>
-                {bookings.length > 0 ? (
-                    bookings.map((booking) => (
-                        <div key={booking._id} className={styles.gridCard}>
-                            <div className={styles.gridCardImgWrapper}>
-                                <img 
-                                    src={`http://localhost:5000/uploads/${booking.car?.photo}`} 
-                                    alt="car" 
-                                    className={styles.gridCardImg} 
-                                    onError={(e) => e.target.src = 'https://via.placeholder.com/300x160?text=Car'}
-                                />
-                                <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
-                                    <span className={getStatusStyle(booking.status)}>
-                                        {booking.status}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className={styles.gridCardBody}>
-                                <h4 className={styles.gridCardTitle}>{booking.car?.brand} {booking.car?.name}</h4>
-                                
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <span className="fw-bold" style={{ color: '#38bdf8' }}>Rs. {booking.car?.price?.toLocaleString()}</span>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{booking.car?.model}</span>
-                                </div>
-                                
-                                <div className="user-info p-3 rounded-4 mb-2" style={{ backgroundColor: 'rgba(15, 23, 42, 0.4)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                    <span className="d-block small fw-bold mb-2" style={{ color: '#38bdf8', letterSpacing: '0.5px' }}>CUSTOMER</span>
-                                    <p className="small mb-1 fw-bold" style={{ color: '#f8fafc' }}>{booking.user?.first_name} {booking.user?.last_name}</p>
-                                    <p className="small mb-0" style={{ color: '#94a3b8' }}>{booking.user?.email}</p>
-                                </div>
-
-                                <div className="dealer-info p-3 rounded-4 mb-3" style={{ backgroundColor: 'rgba(15, 23, 42, 0.4)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                    <span className="d-block small fw-bold mb-2" style={{ color: '#6366f1', letterSpacing: '0.5px' }}>DEALER</span>
-                                    <p className="small mb-1 fw-bold" style={{ color: '#f8fafc' }}>{booking.dealer?.name}</p>
-                                    <p className="small mb-0" style={{ color: '#94a3b8' }}>{booking.dealer?.email}</p>
-                                </div>
-
-                                <p className="small text-center mb-0" style={{ color: '#64748b' }}>
-                                    <i className="fa-regular fa-clock me-1"></i> {new Date(booking.createdAt).toLocaleDateString()}
-                                </p>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="col-12 text-center py-5">
-                        <p className="fs-5" style={{ color: '#94a3b8' }}>No bookings found in the system.</p>
-                    </div>
-                )}
+            <div className={styles.filterTabs}>
+                {statusTabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        className={`${styles.filterTab} ${status === tab.id ? styles.activeTab : ''}`}
+                        onClick={() => setStatus(tab.id)}
+                    >
+                        <i className={tab.icon}></i>
+                        <span>{tab.label}</span>
+                    </button>
+                ))}
             </div>
+
+            <div className={styles.tableCard}>
+                <div className={styles.tableResponsive}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th className={styles.th}>Vehicle</th>
+                                <th className={styles.th}>Customer</th>
+                                <th className={styles.th}>Dealer</th>
+                                <th className={styles.th}>Schedule</th>
+                                <th className={styles.th}>Amount</th>
+                                <th className={styles.th}>Status</th>
+                                {/* <th className={styles.th}>Action</th> */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bookings.length > 0 ? (
+                                bookings.map((booking) => (
+                                    <tr key={booking._id} className={styles.tr}>
+                                        <td className={styles.td}>
+                                            <div className={styles.vehicleCell}>
+                                                {/* <img
+                                                    src={`http://localhost:5000/categoryPic/${booking.car?.photo}`}
+                                                    alt="vehicle"
+                                                    className={styles.miniImg}
+                                                // onError={(e) => e.target.src = 'https://via.placeholder.com/60x40'}
+                                                /> */}
+                                                <div className={styles.cellInfo}>
+                                                    <span className={styles.primaryText}>{booking.car?.brand} {booking.car?.name}</span>
+                                                    <span className={styles.secondaryText}>{booking.car?.type || 'Car'}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className={styles.td}>
+                                            <div className={styles.cellInfo}>
+                                                <span className={styles.primaryText}>{booking.user?.first_name} {booking.user?.last_name}</span>
+                                                <span className={styles.secondaryText}>{booking.user?.email}</span>
+                                            </div>
+                                        </td>
+                                        <td className={styles.td}>
+                                            <span className={styles.primaryText}>{booking.dealer?.name}</span>
+                                        </td>
+                                        <td className={styles.td}>
+                                            <div className={styles.cellInfo}>
+                                                <span className={styles.primaryText}>{new Date(booking.startDate).toLocaleDateString()}</span>
+                                                <span className={styles.secondaryText}>to {new Date(booking.endDate).toLocaleDateString()}</span>
+                                            </div>
+                                        </td>
+                                        <td className={styles.td}>
+                                            <span className={styles.priceText}>₹{booking.totalAmount?.toLocaleString()}</span>
+                                        </td>
+                                        <td className={styles.td}>
+                                            <span className={getStatusStyle(booking.status)}>
+                                                {booking.status}
+                                            </span>
+                                        </td>
+                                        {/* <td className={styles.td}>
+                                            <button className={styles.btnIconAction} title="View Details">
+                                                <i className="fas fa-eye"></i>
+                                            </button>
+                                        </td> */}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className={styles.tdEmpty}>
+                                        <div className={styles.emptyTableState}>
+                                            <i className="fas fa-calendar-times"></i>
+                                            <p>No transactions found for the selected status.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     );
 };
 
 export default ViewBookings;
+

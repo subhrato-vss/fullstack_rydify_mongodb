@@ -31,8 +31,8 @@ const FeaturedCars = () => {
     <section className={styles.section}>
       <div className="container">
         <div className={styles.titleArea}>
-          <span className={styles.subTitle}>Top Car Inventory</span>
-          <h2 className={styles.secTitle}>Latest Featured Car Inventory</h2>
+          <span className={styles.subTitle}>Top Fleet Inventory</span>
+          <h2 className={styles.secTitle}>Latest Featured Inventory</h2>
         </div>
 
         <div className={styles.filterContainer}>
@@ -68,7 +68,7 @@ const FeaturedCars = () => {
               </div>
               <h3 className={styles.emptyTitle}>No Matching Vehicles</h3>
               <p className={styles.emptyText}>
-                We couldn't find any cars in this category right now. 
+                We couldn't find any vehicles in this category right now. 
                 Try exploring our other premium collections.
               </p>
               <button 

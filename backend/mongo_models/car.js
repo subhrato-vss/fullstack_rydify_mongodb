@@ -4,6 +4,7 @@ const carSchema = new mongoose.Schema({
     brand: { type: String, required: true },
     model: { type: String, required: true },
     name: { type: String },
+    type: { type: String, enum: ['car', 'bike'], default: 'car' },
     fuelType: { 
         type: String, 
         enum: ['Petrol', 'Diesel', 'CNG', 'Electric', 'Hybrid'], 

@@ -59,34 +59,53 @@
 
 .statsMini {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .statItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  background: rgba(30, 41, 59, 0.5);
-  padding: 1rem 1.5rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 0.75rem;
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(20px);
+  padding: 0.5rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.statItem:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(30, 41, 59, 0.6);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.statItem i {
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
 .statVal {
   display: block;
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.2rem;
+  font-weight: 900;
   color: #f8fafc;
   line-height: 1;
+  letter-spacing: -0.5px;
 }
 
 .statLbl {
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: #64748b;
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
+
+
+
 
 /* Form Styles */
 .formCard {

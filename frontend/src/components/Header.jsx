@@ -51,7 +51,7 @@ const Header = () => {
                         </li>
                         <li>
                             <Link to="/cars" className={`${styles.navLink} ${!scrolled && isHomePage ? styles.navLinkLight : ''}`}>
-                                Cars
+                                Fleet
                             </Link>
                         </li>
                         <li>
@@ -105,7 +105,7 @@ const Header = () => {
                 <nav className={styles.mobileNav}>
                     <Link to="/" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>Home</Link>
                     <Link to="/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>About</Link>
-                    <Link to="/cars" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>Cars</Link>
+                    <Link to="/cars" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>Fleet</Link>
                     <Link to="/compare" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>Compare</Link>
                     <Link to="/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                     
